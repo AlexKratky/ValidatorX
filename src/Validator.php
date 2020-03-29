@@ -53,36 +53,34 @@ class Validator extends ValidatorFunctions
      * Validates input by rule.
      * @param mixed $input The text(data) that will be validated.
      * @param int $rule Sets the rule for validating. If the rule is not valid, then it will use following parameters:
-     * @param int $min_length The minimum length of $input.
+     * @param int|string $min_length The minimum length of $input. If $rule is 0 (RULE_CUSTOM), then pass Validator name
      * @param int $max_length The maximum length of $input.
      * @param string The character mask of $input. Regex.
      * @return bool Returns true if the input is valid, otherwise false.
      */
-    public static function validate($input, int $rule = 0, int $min_length = 0, int $max_length = 0, string $chars = '/[^A-Za-z0-9]/'): bool
+    public static function validate($input, int $rule = 0, $min_length_or_validator_name = 0, int $max_length = 0, string $chars = '/[^A-Za-z0-9]/'): bool
     {
         if (empty($input)) {
             return false;
         }
         switch ($rule) {
+            case self::RULE_CUSTOM:
+                if(!self::validatorExists($min_length_or_validator_name)) return false;
+                return self::$customValidators[$min_length_or_validator_name]::validate($input);
             case self::RULE_MAIL:
                 return self::validateMail($input);
-                break;
             case self::RULE_USERNAME:
                 return self::validateUsername($input);
-                break;
             case self::RULE_PASSWORD:
                 return self::validatePassword($input);
-                break;
             case self::RULE_CHECKBOX:
                 return self::validateCheckBox($input);
-                break;
             default:
-                if (strlen($input) >= $min_length && strlen($input) <= $max_length && !preg_match($chars, $input)) {
+                if (strlen($input) >= $min_length_or_validator_name && strlen($input) <= $max_length && !preg_match($chars, $input)) {
                     return true;
                 } else {
                     return false;
                 }
-                break;
 
         }
     }

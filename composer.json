@@ -13,6 +13,6 @@
         "php": ">=7.0"
     },
     "autoload": {
-        "files": ["src/URL.php"]
+        "files": ["src/MissingValidatorException.php", "src/IValidator.php", "src/ValidatorFunctions.php", "src/Validator.php"]
     }
 }
