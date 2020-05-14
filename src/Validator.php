@@ -1,11 +1,11 @@
 <?php
 /**
  * @name Validator.php
- * @link https://alexkratky.cz                          Author website
+ * @link https://alexkratky.com                         Author website
  * @link https://panx.eu/docs/                          Documentation
- * @link https://github.com/AlexKratky/panx-framework/  Github Repository
- * @author Alex Kratky <info@alexkratky.cz>
- * @copyright Copyright (c) 2019 Alex Kratky
+ * @link https://github.com/AlexKratky/ValidatorX/      Github Repository
+ * @author Alex Kratky <alex@panx.dev>
+ * @copyright Copyright (c) 2020 Alex Kratky
  * @license http://opensource.org/licenses/mit-license.php MIT License
  * @description Class to validate the user inputs. Part of panx-framework.
  */
@@ -42,7 +42,7 @@ class Validator extends ValidatorFunctions
     public static function multipleValidate(array $inputs)
     {
         foreach ($inputs as $input) {
-            if (!validate($input[0], $input[1], $input[2] ?? 0, $input[3] ?? 0, $input[4] ?? '/[^A-Za-z0-9]/')) {
+            if (!self::validate($input[0], $input[1], $input[2] ?? 0, $input[3] ?? 0, $input[4] ?? '/[^A-Za-z0-9]/')) {
                 return $input;
             }
         }
@@ -65,7 +65,7 @@ class Validator extends ValidatorFunctions
         }
         switch ($rule) {
             case self::RULE_CUSTOM:
-                if(!self::validatorExists($min_length_or_validator_name)) return false;
+                if(!self::validatorExists((string)$min_length_or_validator_name)) return false;
                 return self::$customValidators[$min_length_or_validator_name]::validate($input);
             case self::RULE_MAIL:
                 return self::validateMail($input);
